@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Categorie{% endblock %}
+
+{% block body %}
+    <h1>Créer une nouvelle Catégorie</h1>
+
+    {{ include('categorie_crud/_form.html.twig') }}
+
+    <a href="{{ path('app_categorie_crud_index') }}">Retourner à la liste</a>
+{% endblock %}

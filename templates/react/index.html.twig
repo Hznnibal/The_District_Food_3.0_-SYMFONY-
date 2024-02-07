@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReactController!
+{% endblock %}
+        {% block stylesheets %}
+{{ encore_entry_link_tags('styles') }}
+
+        {% endblock %}
+
+{% block body %}
+     <div id="react-app"></div>
+{% endblock %}
+        {% block javascripts %}
+{{ encore_entry_script_tags('app_react') }}
+
+        {% endblock %}

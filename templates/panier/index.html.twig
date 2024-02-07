@@ -1,0 +1,247 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier{% endblock %}
+
+{% block body %}
+    <style>
+
+
+* {
+    box-sizing: border-box;
+}
+
+h3{
+    font-family: 'Dancing Script', cursive;
+}
+
+h2 {
+    font-size: 40px;
+    background: linear-gradient(to left, #660066 0%, #ff3300 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.row {
+    display: -ms-flexbox;
+    /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap;
+    /* IE10 */
+    flex-wrap: wrap;
+    margin: 0 -16px;
+} 
+
+.col-25 {
+    -ms-flex: 25%;
+    /* IE10 */
+    flex: 25%;
+}
+
+.col-50 {
+    -ms-flex: 50%;
+    /* IE10 */
+    flex: 50%;
+}
+
+.col-75 {
+    -ms-flex: 75%;
+    /* IE10 */
+    flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+    padding: 0 16px;
+}
+
+.container2 {
+    background-color: #f2f2f2;
+    padding: 5px 20px 15px 20px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+}
+
+input[type=text] {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.icon-container {
+    margin-bottom: 20px;
+    padding: 7px 0;
+    font-size: 24px;
+}
+.btn2 {
+    display: inline-block;
+    padding: 8px 30px;
+    background-color: #ffbe33;
+    color: #ffffff;
+    border-radius: 45px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border: none;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: linear-gradient(to left, #003399 0%, #99ccff 100%);
+}
+
+a {
+    color: #2196F3;
+}
+
+hr {
+    border: 1px solid lightgrey;
+}
+
+span.price {
+    float: right;
+    color: grey;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
+@media (max-width: 800px) {
+    .row {
+        flex-direction: column-reverse;
+    }
+
+    .col-25 {
+        margin-bottom: 20px;
+    }
+}
+</style>
+    <section class="bg-light p-3">
+        <h1>Votre panier</h1>
+    </section>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Libellé</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <form action="{{ path('cart_commande') }}" method="post">        
+        <tbody>
+            {% for plat in plats %}
+                <tr>
+                    <td>{{ plat.libelle }}</td>
+                    <td class="text-end">{{ plat.prix }} €</td>
+                    <td>{{ plat.quantite }}</td>
+                    <td class="text-end">{{ plat.quantite * plat.prix }} €</td>
+                    <td>
+                        <a href="{{ path("cart_add", {id: plat.id}) }}" class="btn btn-success">
+                            <i class="bi bi-cart-plus"></i>
+                        </a>
+                        <a href="{{ path("cart_remove", {id: plat.id}) }}" class="btn btn-warning">
+                            <i class="bi bi-cart-dash"></i>
+                        </a>
+                        <a href="{{ path("cart_delete", {id: plat.id}) }}" class="btn btn-danger">
+                            <i class="bi bi-cart-x"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if plats is empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Votre panier est vide</td>
+                </tr>
+            {% endif %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total</td>
+                <td class="text-end">{{ total }} €</td>
+
+
+                <td>
+                    <a href="{{ path("cart_delete_all") }}" class="btn btn-danger">
+                        <i class="bi bi-cart-x"></i>
+                    </a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+<div class="row">
+    <div class="col-75">
+        <div class="container2">
+            
+
+                <div class="row">
+                    <div class="col-50">
+                        <h3>Adresse de livraison</h3>
+                        <label for="fname"><i class="fa fa-user"></i> Nom complet</label>
+                        <input type="text" id="fname" name="firstname" placeholder="Ravi Raushan">
+                        <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                        <input type="text" id="email" name="email" placeholder="ravi@raushan.com">
+                        <label for="adr"><i class="fa fa-address-card-o"></i> Adresse</label>
+                        <input type="text" id="adr" name="address" placeholder="officers Colony">
+                        <label for="city"><i class="fa fa-institution"></i> Ville</label>
+                        <input type="text" id="city" name="city" placeholder="Amiens">
+
+                        <div class="row">
+                            <div class="col-50">
+                                <label for="state">Région </label>
+                                <input type="text" id="state" name="state" placeholder="Picardie">
+                            </div>
+                            <div class="col-50">
+                                <label for="zip">Code postal</label>
+                                <input type="text" id="zip" name="zip" placeholder="80000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-50">
+                        <h3>Paiement</h3>
+                        <label for="fname">Cartes acceptés</label>
+                        <div class="icon-container">
+                            <i class="fa fa-cc-visa" style="color:navy;"></i>
+                            <i class="fa fa-cc-amex" style="color:blue;"></i>
+                            <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                            <i class="fa fa-cc-discover" style="color:orange;"></i>
+                        </div>
+                        <label for="cname">Nom de la carte </label>
+                        <input type="text" id="cname" name="cardname" placeholder="Ravi Raushan">
+                        <label for="ccnum">N° de carte de crédit</label>
+                        <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                        <label for="expmonth">Mois d'expiration</label>
+                        <input type="text" id="expmonth" name="expmonth" placeholder="Septembre">
+                        <div class="row">
+                            <div class="col-50">
+                                <label for="expyear">Année d'expiration</label>
+                                <input type="text" id="expyear" name="expyear" placeholder="2033">
+                            </div>
+                            <div class="col-50">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="111">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <label>
+                    <input type="checkbox" checked="checked" name="sameadr"> Sauvegarder l'adresse pour de prochaine commande
+                </label>
+                <input type="submit" value="Valider la commande" onclick="return confirm('Votre commande a bien été validée.');" class="btn2">
+            </form>
+            <a class="btn2" href="{{ path('app_menu') }}" onclick="return confirm('Retour au menu ?');">Retour au menu</a>
+        </div>
+    </div>
+
+    </form>
+</div>    
+{% endblock %}

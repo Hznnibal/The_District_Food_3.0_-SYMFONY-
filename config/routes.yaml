@@ -1,0 +1,24 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+app_add:
+    path: '/add/{id}'
+    controller: 'App\Controller\PanierController::add'
+
+app_remove:
+    path: '/remove/{id}'
+    controller: 'App\Controller\PanierController::remove'
+
+app_delete:
+    path: '/delete/{id}'
+    controller: 'App\Controller\PanierController::delete'
+
+app_delete_all:
+    path: '/delete'
+    controller: 'App\Controller\PanierController::deleteAll'
+
+app_commande:
+    path: '/commande'
+    controller: 'App\Controller\PanierController::commande'    

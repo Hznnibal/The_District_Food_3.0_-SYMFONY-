@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorie{% endblock %}
+
+{% block body %}
+    <h1>Categorie</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ categorie.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ categorie.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ categorie.image }}</td>
+            </tr>
+            <tr>
+                <th>Active</th>
+                <td>{{ categorie.active ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_crud_index') }}">Retourner à la liste</a>
+
+    <a href="{{ path('app_categorie_crud_edit', {'id': categorie.id}) }}">Editer</a>
+
+    {{ include('categorie_crud/_delete_form.html.twig') }}
+{% endblock %}

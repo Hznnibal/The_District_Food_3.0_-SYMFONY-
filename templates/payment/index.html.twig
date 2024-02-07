@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PaymentController!{% endblock %}
+
+{% block body %}
+<h1>Formulaire de Paiement</h1>
+
+<form action="" method="post" id="payment-form">
+    <div class="form-group">
+        <label for="card-element">
+            Carte de crédit ou de débit
+        </label>
+        <div id="card-element">
+            <!-- Un élément de carte Stripe sera inséré ici. -->
+        </div>
+
+        <!-- Utilisé pour afficher les erreurs de validation. -->
+        <div id="card-errors" role="alert"></div>
+    </div>
+
+    <button type="submit">Payer</button>
+</form>
+
+<script>
+    // Configurez Stripe avec votre clé publique.
+    var stripe = Stripe('{{ stripe_public_key }}');
+
+    var elements = stripe.elements();
+
+    // Créez un élément de carte et ajoutez-le au formulaire.
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    // Gestion des erreurs de validation de la carte
+    card.addEventListener('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Gestion de la soumission du formulaire
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Désactivez le bouton de soumission pour éviter les soumissions multiples.
+        form.querySelector('button').disabled = true;
+
+        // Créez un jeton de carte avec Stripe.js
+        stripe.createToken(card).then(function(result) {
+            if (result.error) {
+                // Informez l'utilisateur s'il y a eu une erreur.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Ajoutez le jeton en tant que champ caché au formulaire
+                var tokenInput = document.createElement('input');
+                tokenInput.setAttribute('type', 'hidden');
+                tokenInput.setAttribute('name', 'stripeToken');
+                tokenInput.setAttribute('value', result.token.id);
+                form.appendChild(tokenInput);
+
+                // Soumettez le formulaire au serveur pour le traitement de la transaction
+                form.submit();
+            }
+        });
+    });
+</script>
+{% endblock %}
